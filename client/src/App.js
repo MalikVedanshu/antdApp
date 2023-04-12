@@ -13,7 +13,7 @@ const { Header, Footer, Sider, Content } = Layout;
 
 function App() {
     const dispatch = useDispatch();
-    const expenses = useSelector(state => state.expense);
+    const expenses = useSelector(state => state.expence);
     const [itemData, setItemData] = useState(null);
     const [visible, setVisible] = useState(false);
     console.log(expenses);
@@ -57,6 +57,7 @@ function App() {
                 <Space className='allExpenses' direction="vertical">
                     {
                         expenses.map((ele, idx) => (
+                            
                             <Card key={idx} title={ele.expense}>
                                 <div className="contentCols">
                                     <div>ID:</div>
@@ -78,11 +79,12 @@ function App() {
                                     <div>{ele.coment}</div>
                                 </div>
                                 <div className="contentCols">
-                                    <Button type='primary' onClick={dispatch(del({ id: ele.id }))}> Delete </Button>
+                                    <Button type='primary' onClick={() => dispatch(del({ id: ele.id }))}> Delete </Button>
                                     <Button type='primary' id={idx} onClick={() => triggerModal(ele)}> Edit </Button>
                                 </div>
 
                             </Card>
+                            
                         ))
                     }
                 </Space>

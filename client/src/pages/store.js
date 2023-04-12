@@ -3,6 +3,6 @@ import expenseReducer from './sliceone';
 
 export const store = configureStore({
     reducer: {
-        expense: expenseReducer
+        expence: expenseReducer
     }
 })

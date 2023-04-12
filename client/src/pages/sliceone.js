@@ -13,6 +13,13 @@ const initialState = [
         date: "2023-04-11",
         amount: 120,
         coment: "Tiffin"
+    },
+    {
+        id: 3,
+        expense: "Dinner",
+        date: "2023-04-12",
+        amount: 80,
+        coment: "Self"
     }
 ]
 
