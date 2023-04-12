@@ -1,65 +1,93 @@
+import { Button, Space, Card, Modal, Layout,Row,Col } from "antd";
 import 'antd/dist/reset.css';
-import { Button, DatePicker } from 'antd';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { add, del, edit } from './pages/sliceone';
 import AddEdit from './pages/addEditExpense';
+// import Formpage from './pages/form';
+import Myform from './pages/myform';
+import './App.css';
+
+const { Header, Footer, Sider, Content } = Layout;
 
 
 function App() {
-    const expenses = useSelector((state) => state.expense);
     const dispatch = useDispatch();
-    const [expenseVals, setExpenseVals] = useState({
-        expense: "",
-        date: "",
-        amount: "",
-        coment: ""
-    });
-    const [editId, setEditId] = useState(null);
+    const expenses = useSelector(state => state.expense);
+    const [itemData, setItemData] = useState(null);
+    const [visible, setVisible] = useState(false);
+    console.log(expenses);
 
-    const [shouldOpenModal, setShouldOpenModal] = useState(false);
-    const onDataChange = (data) => {
-        setExpenseVals(data);
+    const triggerModal = (ele) => {
+        setItemData(ele)
+        setVisible(true);
+    }
+    const triggerToAdd = (ele) => {
+        setItemData({
+            id: "",
+            expense: "",
+            date: "",
+            amount: "",
+            coment: ""
+        })
+        setVisible(true);
+    }
+
+    const onOk = () => {
+        setVisible(false);
+
+    }
+    const onCancel = () => {
+        setVisible(false);
     }
 
 
-    const triggerModal = (e) => {
-        if (e.target.name == -1) {
-            setShouldOpenModal(!shouldOpenModal);
-        } else {
-            setExpenseVals(expenses[e.target.name * 1]);
-            setEditId(expenses[e.target.name].id);
-            setShouldOpenModal(prevVal => prevVal = !prevVal);
-        }
-    }
     return (
         <>
-            <div>
-                <input type="button" name={-1} onClick={triggerModal} value="Add" />
-                {
-                    shouldOpenModal &&
-                    <div>
-                        <AddEdit data={expenseVals} onDataChange={onDataChange} />
-                        <input type="button" onClick={() => dispatch(add(expenseVals))} value="Submit Add" />
-                        <input type="button" onClick={() => dispatch(edit({ id: editId * 1, eExpense: expenseVals }))} value="Submit Edit" />
-                    </div>
-                }
-            </div>
-            <div className='allExpenses'>
-                {
-                    expenses.map((ele, idx) => (
-                        <div key={idx}>
-                            <div>{ele.id}</div>
-                            <div>{ele.expense}</div>
-                            <div>{ele.date}</div>
-                            <div>{ele.amount}</div>
-                            <div>{ele.coment}</div>
-                            <input type='button' name={idx} onClick={(e) => dispatch(del({ id: e.target.name * 1 + 1 }))} value="Delete" />
-                            <input type='button' name={idx} onClick={triggerModal} value="Edit" />
-                        </div>
-                    ))
-                }
-            </div>
+            <Modal open={visible} onOk={onCancel} onCancel={onCancel}>
+                <div><Myform data={itemData} /></div>
+            </Modal>
+
+
+            <Header>
+                <Button type="primary" onClick={triggerToAdd}> Add </Button>
+            </Header>
+
+            <Content>
+                <Space className='allExpenses' direction="vertical">
+                    {
+                        expenses.map((ele, idx) => (
+                            <Card key={idx} title={ele.expense}>
+                                <div className="contentCols">
+                                    <div>ID:</div>
+                                    <div>{ele.id}</div>
+                                </div>
+
+                                <div className="contentCols">
+                                    <div>Date: </div>
+                                    <div>{ele.date}</div>
+                                </div>
+
+                                <div className="contentCols">
+                                    <div>Amount:</div>
+                                    <div>{ele.amount}</div>
+                                </div>
+
+                                <div className="contentCols">
+                                    <div>Coment:</div>
+                                    <div>{ele.coment}</div>
+                                </div>
+                                <div className="contentCols">
+                                    <Button type='primary' onClick={dispatch(del({ id: ele.id }))}> Delete </Button>
+                                    <Button type='primary' id={idx} onClick={() => triggerModal(ele)}> Edit </Button>
+                                </div>
+
+                            </Card>
+                        ))
+                    }
+                </Space>
+            </Content>
+
         </>
     )
 }
