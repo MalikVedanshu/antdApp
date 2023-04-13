@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Button, Select, Form, Input } from 'antd';
 import { useDispatch } from 'react-redux';
 import {add, del, edit} from './sliceone';
@@ -8,22 +8,18 @@ const { Option } = Select;
 function Myform(data) {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
-
+    const [modalShouldOpen, setModalShouldOpen] = useState(true);
 
     const onFinish = (val) => {
-        if(data === null ) {
+        if(data.data === null ) {
             dispatch(add(val))
         } else {
             dispatch(edit({id: data.id, data: val}))
         }
-
     }
-
-
 
     return (
         <>
-           
             <Form form = {form} name='expenseDetails' onFinish={onFinish}>
                 {/* Expense */}
                 <Form.Item name="expense" rules={[{ required: true, message: "Expense is required" }]}>

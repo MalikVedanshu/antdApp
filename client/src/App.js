@@ -20,23 +20,9 @@ function App() {
 
     const triggerModal = (ele) => {
         setItemData(ele)
-        setVisible(true);
-    }
-    const triggerToAdd = (ele) => {
-        setItemData({
-            id: "",
-            expense: "",
-            date: "",
-            amount: "",
-            coment: ""
-        })
-        setVisible(true);
+        setVisible(prevVal => prevVal = !prevVal);
     }
 
-    const onOk = () => {
-        setVisible(false);
-
-    }
     const onCancel = () => {
         setVisible(false);
     }
@@ -50,7 +36,7 @@ function App() {
 
 
             <Header>
-                <Button type="primary" onClick={triggerToAdd}> Add </Button>
+                <Button type="primary" onClick={() => triggerModal(null)}> Add </Button>
             </Header>
 
             <Content>
