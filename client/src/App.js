@@ -1,12 +1,20 @@
-import { Button, Space, Card, Modal, Layout,Row,Col } from "antd";
-import 'antd/dist/reset.css';
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { add, del, edit } from './pages/sliceone';
-import AddEdit from './pages/addEditExpense';
-// import Formpage from './pages/form';
-import Myform from './pages/myform';
+import 'antd/dist/reset.css';
 import './App.css';
+// import AddEdit from './pages/addEditExpense';
+import { useSelector, useDispatch } from 'react-redux';
+import Myform from './pages/myform';
+import { add, del, edit } from './pages/sliceone';
+import { Button, Table, Space, Card, Modal, Layout, Row, Col } from "antd";
+const { Column, ColumnGroup } = Table;
+
+
+
+
+
+// import Formpage from './pages/form';
+
+
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -26,56 +34,38 @@ function App() {
     const onCancel = () => {
         setVisible(false);
     }
+    const data = [...expenses];
 
 
     return (
         <>
             <Modal open={visible} onOk={onCancel} onCancel={onCancel}>
-                <div><Myform data={itemData} /></div>
+                <div key="add"><Myform data={itemData}/></div>
             </Modal>
 
 
             <Header>
-                <Button type="primary" onClick={() => triggerModal(null)}> Add </Button>
+                <Button type="primary" key="add" onClick={() => triggerModal(null)}> Add </Button>
             </Header>
 
-            <Content>
-                <Space className='allExpenses' direction="vertical">
-                    {
-                        expenses.map((ele, idx) => (
-                            
-                            <Card key={idx} title={ele.expense}>
-                                <div className="contentCols">
-                                    <div>ID:</div>
-                                    <div>{ele.id}</div>
-                                </div>
 
-                                <div className="contentCols">
-                                    <div>Date: </div>
-                                    <div>{ele.date}</div>
-                                </div>
-
-                                <div className="contentCols">
-                                    <div>Amount:</div>
-                                    <div>{ele.amount}</div>
-                                </div>
-
-                                <div className="contentCols">
-                                    <div>Coment:</div>
-                                    <div>{ele.coment}</div>
-                                </div>
-                                <div className="contentCols">
-                                    <Button type='primary' onClick={() => dispatch(del({ id: ele.id }))}> Delete </Button>
-                                    <Button type='primary' id={idx} onClick={() => triggerModal(ele)}> Edit </Button>
-                                </div>
-
-                            </Card>
-                            
-                        ))
-                    }
-                </Space>
-            </Content>
-
+            <Table dataSource={expenses}> 
+                <Column title="ID" dataIndex="id" key="id" />
+                <Column title="Expense" dataIndex="expense" key="expense" />
+                <Column title="Date" dataIndex="date" key="date" />
+                <Column title="Amount" dataIndex="amount" key="amount" />
+                <Column title="Coment" dataIndex="coment" key="coment" />
+                <Column title="Buttons" key="btns" render={
+                    (_, ele) => (
+                        <Space key={ele.id}>
+                            <Button type='primary' key="del" onClick={() => dispatch(del({ id: ele.id }))}> Delete </Button>
+                            <Button type='primary' key="add" onClick={() => triggerModal(ele)}> Edit </Button>
+                        </Space>
+                    )
+                } />
+            </Table >
+            {/* <Button type='primary' onClick={() => dispatch(del({ id: ele.id }))}> Delete </Button>
+                            <Button type='primary' onClick={() => triggerModal(ele)}> Edit </Button> */}
         </>
     )
 }
