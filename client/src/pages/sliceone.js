@@ -29,7 +29,9 @@ export const expenseSlice = createSlice({
     reducers: {
         // console.log(state)
         add: (state, action) => {
-            state.push(action.payload.addVal);
+            let lastId = state[state.length - 1].id + 1;
+            action.payload.id = lastId;
+            state.push(action.payload);
         },
         del: (state, action) => {
             if (state.length > 1) {
