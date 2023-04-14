@@ -1,10 +1,21 @@
 import express from 'express';
 const app = express();
 const port = 5000;
-app.use(express.json());
+import expenseRoute from './controllers/expenseRoute.js';
 
-app.get('/', (req,res) => {
-    res.send(200).json({msg: "This is home page."});
+app.use(express.json());
+app.use('/expenses', expenseRoute);
+
+import './utilities/dbConnect.js';
+
+app.get('/', async (req,res) => {
+    try {
+        res.status(200).json({msg: "This is home route"})
+    } 
+    catch (error) {
+        res.status(500).json({error: "Internal server error."});
+    }
+    
 })
 
 app.listen(port, () => {
