@@ -6,9 +6,8 @@ import axios from 'axios';
 export const getExpenses = createAsyncThunk(
     'expense/getExpenses',
     async () => {
-        try {
-            let myexp = await axios.get("/expenses/allexpenses")
-            console.log(myexp.data.data);
+        try { 
+            let myexp = await axios.get("/expenses/allexpenses") 
             return myexp.data.data;
         } catch (error) {
             console.log(error);
@@ -20,7 +19,6 @@ export const getExpenses = createAsyncThunk(
 const initialState = [
     {
         _id: "",
-
         expense: "",
         date: "",
         amount: null,
@@ -34,13 +32,13 @@ export const expenseSlice = createSlice({
     extraReducers: (builders) => {
         builders
             // .addCase(getExpenses.pending, console.log('Still Loading'))
-            .addCase(getExpenses.fulfilled, (state, action) => {
-                state = action.payload;
+            .addCase(getExpenses.fulfilled, (state, action) => { 
+               return state = action.payload;
             })
     },
     reducers: {
         // console.log(state)
-        add: (state, action) => {
+        add: async (state, action) => {
             state.push(action.payload);
         },
         del: (state, action) => {
@@ -63,6 +61,7 @@ export const expenseSlice = createSlice({
         }
     }
 })
+
 
 export const { add, del, edit } = expenseSlice.actions;
 export default expenseSlice.reducer;

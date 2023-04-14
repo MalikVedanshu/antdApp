@@ -8,13 +8,17 @@ import axios from 'axios';
 function Myform({ data, open, onOk, onCancel }) {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
-    const onFinish = (val) => {
-        // console.log(data.onCancel());
+    const onFinish = async (val) => {
+        console.log(val);
         if (data === null) {
-            // dispatch(add(val));
+                       
+            await axios.post("/expenses/addexpense", val);
+            dispatch(add(val));
             onCancel();
         } else {
-            dispatch(edit({ id: data._id, ...val }));
+            await axios.put("/expenses/editexpense", { id: data._id, ...val });
+            dispatch(edit({ _id: data._id, ...val }));
+
             onCancel();
         }
     }
@@ -24,10 +28,10 @@ function Myform({ data, open, onOk, onCancel }) {
             form.setFieldsValue(data)
         }
     }, [data])
-    const nodeRef = React.useRef(null);
+    // const nodeRef = React.useRef(null);
     return (
         <>
-            <Modal  nodeRef={nodeRef} open={open} onCancel={onCancel} onOk={() => onFinish(form.getFieldsValue())}>
+            <Modal open={open} onCancel={onCancel} onOk={() => onFinish(form.getFieldsValue())}>
                 <Form form={form} name='expenseDetails'>
                     <Form.Item name="expense" rules={[{ required: true, message: "Expense is required" }]}>
                         <Input placeholder='Expense' />

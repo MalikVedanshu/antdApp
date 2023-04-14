@@ -26,13 +26,15 @@ router.post('/addexpense', async (req,res) => {
     }
 })
 
-router.delete('/deleteexpense', async (req,res) => {
+router.delete('/deleteexpense/:id', async (req,res) => {
     try {
         // let id = req.body.id;
-        let deleteExpense = await Expensemodal.findById(req.body.id);
+        // console.log(req.body);
+        let deleteExpense = await Expensemodal.findById(req.params.id);
         if(!deleteExpense) return res.status(400).json({msg: 'Invalid ID'})
         
-        await Expensemodal.findByIdAndDelete(req.body.id);
+       
+        await Expensemodal.findOneAndDelete({_id: req.params.id});
         return res.status(200).json({msg: "Expense deleted successefully."})
     }
     catch (error) {

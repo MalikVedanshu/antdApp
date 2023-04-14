@@ -1,10 +1,10 @@
-import React, { useState,useRef, useEffect  } from 'react';
+import React, { useState, useEffect  } from 'react';
 import 'antd/dist/reset.css';
 import { useSelector, useDispatch } from 'react-redux';
-import {getExpenses} from './pages/sliceone.js';
 import Myform from './pages/myform';
-import { del } from './pages/sliceone';
+import { del, getExpenses } from './pages/sliceone';
 import { Button, Table, Space, FloatButton } from "antd";
+import axios from 'axios';
 const { Column } = Table;
 
 
@@ -18,11 +18,20 @@ function App() {
         setItemData(ele)
         setVisible(true);
     }
+    const onDel = async (aId) => {
+        console.log(aId);
+        await axios.delete(`expenses/deleteexpense/${aId}`)
+        dispatch(del({ id: aId }))
+        
+    }
 
     const onCancel = () => {
         setItemData(null)
         setVisible(false);
     }
+    useEffect(() => {
+        dispatch(getExpenses())
+    },[])
 
 
     return (
@@ -32,15 +41,15 @@ function App() {
 
 
             <Table dataSource={expenses} rowKey="_id">
-                <Column title="ID" dataIndex="_id" />
+                {/* <Column title="ID" dataIndex="_id" /> */}
                 <Column title="Expense" dataIndex="expense" />
                 <Column title="Date" dataIndex="date" />
                 <Column title="Amount" dataIndex="amount" />
                 <Column title="Coment" dataIndex="coment" />
                 <Column title="Buttons" render={
                     (_, ele) => (
-                        <Space key={ele.id}>
-                            <Button type='primary' onClick={() => dispatch(del({ id: ele._id }))}> Delete </Button>
+                        <Space key={ele._id}>
+                            <Button type='primary' onClick={() => onDel(ele._id)}> Delete </Button>
                             <Button type='primary' onClick={() => triggerModal(ele)}> Edit </Button>
                         </Space>
                     )
