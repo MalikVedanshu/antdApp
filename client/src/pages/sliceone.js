@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = [
     {
         id: 1,
+
         expense: "Breakfast",
         date: "2023-04-10",
         amount: 200,
@@ -45,8 +46,7 @@ export const expenseSlice = createSlice({
             return state.map(exp => {
                 // let editedExpense = action.payload.expense;
                 if (exp.id === action.payload.id) {
-                    action.payload.data.id = exp.id;
-                    return action.payload.data;
+                    return action.payload;
                 } else {
                     return exp;
                 }
