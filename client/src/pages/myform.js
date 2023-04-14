@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Form, Input, Modal } from 'antd';
 import { useDispatch } from 'react-redux';
 import { add, edit } from './sliceone';
+import axios from 'axios';
+
 
 function Myform({ data, open, onOk, onCancel }) {
     const [form] = Form.useForm();
@@ -9,10 +11,10 @@ function Myform({ data, open, onOk, onCancel }) {
     const onFinish = (val) => {
         // console.log(data.onCancel());
         if (data === null) {
-            dispatch(add(val));
+            // dispatch(add(val));
             onCancel();
         } else {
-            dispatch(edit({ id: data.id, ...val }));
+            dispatch(edit({ id: data._id, ...val }));
             onCancel();
         }
     }

@@ -1,6 +1,7 @@
-import React, { useState,useRef  } from 'react';
+import React, { useState,useRef, useEffect  } from 'react';
 import 'antd/dist/reset.css';
 import { useSelector, useDispatch } from 'react-redux';
+import {getExpenses} from './pages/sliceone.js';
 import Myform from './pages/myform';
 import { del } from './pages/sliceone';
 import { Button, Table, Space, FloatButton } from "antd";
@@ -30,8 +31,8 @@ function App() {
             <FloatButton onClick={() => triggerModal(null)} shape="square" description="+" />
 
 
-            <Table dataSource={expenses} rowKey="id">
-                <Column title="ID" dataIndex="id" />
+            <Table dataSource={expenses} rowKey="_id">
+                <Column title="ID" dataIndex="_id" />
                 <Column title="Expense" dataIndex="expense" />
                 <Column title="Date" dataIndex="date" />
                 <Column title="Amount" dataIndex="amount" />
@@ -39,7 +40,7 @@ function App() {
                 <Column title="Buttons" render={
                     (_, ele) => (
                         <Space key={ele.id}>
-                            <Button type='primary' onClick={() => dispatch(del({ id: ele.id }))}> Delete </Button>
+                            <Button type='primary' onClick={() => dispatch(del({ id: ele._id }))}> Delete </Button>
                             <Button type='primary' onClick={() => triggerModal(ele)}> Edit </Button>
                         </Space>
                     )

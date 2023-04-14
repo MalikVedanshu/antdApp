@@ -1,42 +1,51 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+
+// const myData = async () => await axios.get("/expenses/allexpenses");
+
+export const getExpenses = createAsyncThunk(
+    'expense/getExpenses',
+    async () => {
+        try {
+            let myexp = await axios.get("/expenses/allexpenses")
+            console.log(myexp.data.data);
+            return myexp.data.data;
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+    }
+)
+
 const initialState = [
     {
-        id: 1,
+        _id: "",
 
-        expense: "Breakfast",
-        date: "2023-04-10",
-        amount: 200,
-        coment: "dhaba"
-    },
-    {
-        id: 2,
-        expense: "Lunch",
-        date: "2023-04-11",
-        amount: 120,
-        coment: "Tiffin"
-    },
-    {
-        id: 3,
-        expense: "Dinner",
-        date: "2023-04-12",
-        amount: 80,
-        coment: "Self"
+        expense: "",
+        date: "",
+        amount: null,
+        coment: ""
     }
 ]
 
 export const expenseSlice = createSlice({
     name: 'expense',
     initialState,
+    extraReducers: (builders) => {
+        builders
+            // .addCase(getExpenses.pending, console.log('Still Loading'))
+            .addCase(getExpenses.fulfilled, (state, action) => {
+                state = action.payload;
+            })
+    },
     reducers: {
         // console.log(state)
         add: (state, action) => {
-            let lastId = state[state.length - 1].id + 1;
-            action.payload.id = lastId;
             state.push(action.payload);
         },
         del: (state, action) => {
             if (state.length > 1) {
-                return state.filter(expense => expense.id !== action.payload.id)
+                return state.filter(expense => expense._id !== action.payload.id)
             } else {
                 return;
             }
@@ -45,7 +54,7 @@ export const expenseSlice = createSlice({
         edit: (state, action) => {
             return state.map(exp => {
                 // let editedExpense = action.payload.expense;
-                if (exp.id === action.payload.id) {
+                if (exp._id === action.payload.id) {
                     return action.payload;
                 } else {
                     return exp;
